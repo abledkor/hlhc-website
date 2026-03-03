@@ -267,6 +267,9 @@
       <!-- 동적 그리드 -->
       <div id="videoGrid" class="sermon-grid"></div>
 
+      <!-- 페이지네이션 -->
+      <div id="pagination" class="pagination"></div>
+
       <!-- 빈 상태 -->
       <div id="emptyState" class="empty-state" style="display:none;">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -374,12 +377,15 @@
 (function () {
   'use strict';
 
-  const API = '/api/videos';
+  const API       = '/api/videos';
+  const PAGE_SIZE = 9;
 
   /* ---------- 상태 ---------- */
-  let pwMode   = '';   // 'upload' | 'delete'
-  let pwValue  = '';   // 검증된 비밀번호 (임시 보관)
-  let activeId = null; // 삭제 대상 id
+  let pwMode    = '';   // 'upload' | 'delete'
+  let pwValue   = '';   // 검증된 비밀번호 (임시 보관)
+  let activeId  = null; // 삭제 대상 id
+  let allVideos = [];   // 전체 목록 (페이지네이션용)
+  let currentPage = 1;
 
   /* ---------- API ---------- */
   async function apiPost(body) {
@@ -412,18 +418,26 @@
   }
 
   /* ---------- 렌더링 ---------- */
-  function render(list) {
+  function renderPage() {
     const grid  = document.getElementById('videoGrid');
     const empty = document.getElementById('emptyState');
+    const pager = document.getElementById('pagination');
 
-    if (!list || list.length === 0) {
-      grid.innerHTML = '';
+    if (!allVideos || allVideos.length === 0) {
+      grid.innerHTML  = '';
+      pager.innerHTML = '';
       empty.style.display = 'flex';
       return;
     }
     empty.style.display = 'none';
 
-    grid.innerHTML = list.map(v => `
+    const totalPages = Math.ceil(allVideos.length / PAGE_SIZE);
+    currentPage = Math.min(Math.max(currentPage, 1), totalPages);
+
+    const start   = (currentPage - 1) * PAGE_SIZE;
+    const pageItems = allVideos.slice(start, start + PAGE_SIZE);
+
+    grid.innerHTML = pageItems.map(v => `
       <div class="sermon-card video-item" style="cursor:pointer;"
            data-id="${esc(v.id)}" data-vid="${esc(v.videoId)}">
         <div class="sermon-thumb"
@@ -445,6 +459,62 @@
         openPlayer(card.dataset.vid, card.querySelector('h4').textContent);
       });
     });
+
+    renderPagination(totalPages);
+  }
+
+  function renderPagination(totalPages) {
+    const pager = document.getElementById('pagination');
+    if (totalPages <= 1) { pager.innerHTML = ''; return; }
+
+    const WINDOW = 2; // 현재 페이지 기준 양쪽 2개
+    let html = '';
+
+    // 이전 버튼
+    html += `<button class="page-btn" data-p="${currentPage - 1}" ${currentPage === 1 ? 'disabled' : ''}>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width:1rem;height:1rem;">
+        <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd"/>
+      </svg>
+    </button>`;
+
+    // 첫 페이지
+    if (currentPage - WINDOW > 1) {
+      html += `<button class="page-btn" data-p="1">1</button>`;
+      if (currentPage - WINDOW > 2) html += `<span class="page-btn" style="border:none;background:none;cursor:default;">…</span>`;
+    }
+
+    // 중간 페이지
+    for (let p = Math.max(1, currentPage - WINDOW); p <= Math.min(totalPages, currentPage + WINDOW); p++) {
+      html += `<button class="page-btn${p === currentPage ? ' active' : ''}" data-p="${p}">${p}</button>`;
+    }
+
+    // 마지막 페이지
+    if (currentPage + WINDOW < totalPages) {
+      if (currentPage + WINDOW < totalPages - 1) html += `<span class="page-btn" style="border:none;background:none;cursor:default;">…</span>`;
+      html += `<button class="page-btn" data-p="${totalPages}">${totalPages}</button>`;
+    }
+
+    // 다음 버튼
+    html += `<button class="page-btn" data-p="${currentPage + 1}" ${currentPage === totalPages ? 'disabled' : ''}>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width:1rem;height:1rem;">
+        <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd"/>
+      </svg>
+    </button>`;
+
+    pager.innerHTML = html;
+    pager.querySelectorAll('button[data-p]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentPage = parseInt(btn.dataset.p);
+        renderPage();
+        document.getElementById('videoGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  }
+
+  function render(list) {
+    allVideos   = list || [];
+    currentPage = 1;
+    renderPage();
   }
 
   async function loadAndRender() {
