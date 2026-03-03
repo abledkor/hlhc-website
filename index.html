@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>하늘빛힐링교회</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .mp-grid {
+      display: grid;
+      gap: 1.25rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 640px) {
+      .mp-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 1024px) {
+      .mp-grid { grid-template-columns: repeat(6, 1fr); }
+      .mp-card:nth-child(1) { grid-column: span 2; }
+      .mp-card:nth-child(2) { grid-column: span 2; }
+      .mp-card:nth-child(3) { grid-column: span 2; }
+      .mp-card:nth-child(4) { grid-column: 2 / span 2; }
+      .mp-card:nth-child(5) { grid-column: 4 / span 2; }
+    }
+    .mp-card {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .mp-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+    .mp-thumb {
+      position: relative;
+      height: 160px;
+      background-size: cover;
+      background-position: center;
+      background-color: var(--slate-200);
+    }
+    .mp-thumb-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.45) 100%);
+    }
+    .mp-icon {
+      position: absolute;
+      bottom: -1.25rem;
+      left: 1.25rem;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 0.75rem;
+      background: linear-gradient(135deg, var(--primary) 0%, #1e40af 100%);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(37,99,235,0.35);
+    }
+    .mp-icon svg { width: 1.25rem; height: 1.25rem; }
+    .mp-body { padding: 2rem 1.25rem 1.25rem; flex: 1; display: flex; flex-direction: column; gap: 0.5rem; }
+    .mp-body h4 { font-size: 1.2rem; font-weight: 700; color: var(--fg); }
+    .mp-body p { font-size: 1rem; color: var(--fg-muted); line-height: 1.65; flex: 1; }
+    .mp-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-top: 0.25rem;
+    }
+    .mp-link svg { width: 0.9rem; height: 0.9rem; }
+  </style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="site-header" id="site-header"></header>
+
+<main>
+
+  <!-- ===== HERO ===== -->
+  <div class="hero-wrapper">
+    <div class="hero" style="background-image: url('./source/church.png');">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1>하늘빛힐링교회</h1>
+        <p>말씀과 기도로 치유, 회복, 돌파, 증가, 형통이 역사하는 교회</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ABOUT PREVIEW ===== -->
+  <section class="section bg-surface">
+    <div class="section-inner">
+      <div class="section-header">
+        <h3>교회 소개</h3>
+        <div class="section-header-bar"></div>
+      </div>
+      <div class="about-grid">
+        <div class="about-img anim from-left"
+          style="background-image: url('./source/won.png');"></div>
+        <div class="about-text anim from-right anim-delay-2">
+          <h4>할렐루야!<br>주님의 사랑으로 환영하고 축복합니다.</h4>
+          <p>하늘빛힐링교회 표어는 ‘말씀과 기도로 치유, 회복, 돌파, 증가, 형통이 역사하는 교회’입니다. 나라와 민족, 그리고 세계 선교와 힐링을 목적으로 설립을 하였습니다.</p>
+          <div class="pastor-info">
+            <div class="pastor-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+              </svg>
+            </div>
+            <div>
+              <strong>담임목사 원보연</strong>
+              <span>하늘빛힐링교회</span>
+            </div>
+          </div>
+          <div>
+            <a href="about.html" style="display:inline-flex;align-items:center;gap:.35rem;color:var(--primary);font-weight:700;">
+              자세히 보기
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MINISTRY ===== -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-header-row">
+        <div>
+          <h3>다양한 교육과 사역</h3>
+          <div class="section-header-bar" style="margin-top:.5rem;"></div>
+        </div>
+        <a href="ministry.html" style="display:flex;align-items:center;gap:.35rem;color:var(--primary);font-weight:700;font-size:.95rem;white-space:nowrap;">
+          더보기
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
+        </a>
+      </div>
+
+      <div class="mp-grid">
+
+        <!-- 1. 힐링치유상담센터 -->
+        <div class="mp-card anim">
+          <div class="mp-thumb" style="background-image: url('./source/min01.jpg');">
+            <div class="mp-thumb-overlay"></div>
+            <div class="mp-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" /></svg>
+            </div>
+          </div>
+          <div class="mp-body">
+            <h4>힐링치유상담센터 운영</h4>
+            <p>영·혼·육의 회복을 위한 12단계 치유상담 프로그램을 운영합니다. 도형상담·분노치유·기억치유·영적치유 등 다양한 분야를 통해 상담과 기도로 치유사역을 감당합니다.</p>
+            </div>
+        </div>
+
+        <!-- 2. 새가족 교육 -->
+        <div class="mp-card anim anim-delay-1">
+          <div class="mp-thumb" style="background-image: url('./source/min02.jpg');">
+            <div class="mp-thumb-overlay"></div>
+            <div class="mp-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0118 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>
+            </div>
+          </div>
+          <div class="mp-body">
+            <h4>새가족 교육 12주</h4>
+            <p>하나님, 말씀, 교회, 예배를 체계적으로 배우는 12주 과정입니다. 성숙한 믿음과 신앙관을 확립하여 교회 정착과 사명을 감당하는 성도로 세워나갑니다.</p>
+            </div>
+        </div>
+
+        <!-- 3. 복음네비게이션 -->
+        <div class="mp-card anim anim-delay-2">
+          <div class="mp-thumb" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC5G2dI-h5WtrMk-jjfTg1E_U2t5UMjVSkC9rQb2V3diU7BWydAJfTvZGh3nXn2XFuThcqlH-YkdDAXPkAqhfAJj2n2rzbteoe9Ifj5Rgr5XHJv1OecxU0qyvJgNaSwuC5azGZcutZePJJmPy4ZZL2t6kF0hZ9sgF28339GD2EQMktpSUPKKSgPalDcSifK8sdRtN25V4BQnEncBahEQy_OqZIa025mrIBy9F_wj5hWyxBRx6yfGeYEtMUaCs1XCowuzmbGIyLEVfk');">
+            <div class="mp-thumb-overlay"></div>
+            <div class="mp-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" /></svg>
+            </div>
+          </div>
+          <div class="mp-body">
+            <h4>복음네비게이션 교육</h4>
+            <p>매주일 오후 예배 후 다양한 장르의 말씀을 익히는 집중 성경공부 프로그램입니다. 새가족 교육 이후 더욱 체계적인 신앙 성숙을 위한 장기 비전 과정입니다.</p>
+            </div>
+        </div>
+
+        <!-- 4. 주일학교 -->
+        <div class="mp-card anim anim-delay-1">
+          <div class="mp-thumb" style="background-image: url('./source/min04.jpeg');">
+            <div class="mp-thumb-overlay"></div>
+            <div class="mp-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" /></svg>
+            </div>
+          </div>
+          <div class="mp-body">
+            <h4>주일학교</h4>
+            <p>자라나는 아이들에게 예배와 말씀 중심으로 예수 그리스도의 사랑을 교육합니다. 미래의 비전과 꿈을 가지고 하나님 나라를 위한 귀한 재목으로 키워나갑니다.</p>
+            </div>
+        </div>
+
+        <!-- 5. 다양한 영적 사역 -->
+        <div class="mp-card anim anim-delay-2">
+          <div class="mp-thumb" style="background-image: url('./source/min05.jpg');">
+            <div class="mp-thumb-overlay"></div>
+            <div class="mp-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" /></svg>
+            </div>
+          </div>
+          <div class="mp-body">
+            <h4>다양한 영적 사역</h4>
+            <p>교회 부흥회·치유집회 인도, 성령운동 수련회 장소 제공, 상담·예배·기도로 힐링 사역을 감당합니다. 영·혼·육 회복을 위한 다양한 문화체험 투어도 안내합니다.</p>
+            </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== WORSHIP INFO ===== -->
+  <section class="section bg-surface-2">
+    <div class="section-inner">
+      <div class="worship-grid">
+        <div class="anim">
+          <h3 class="worship-title">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            예배 안내
+          </h3>
+          <div class="worship-table">
+            <div class="worship-row">
+              <div class="worship-row-left"><strong>주일 오전예배</strong></div>
+              <span class="worship-time">오전 11시</span>
+            </div>
+            <div class="worship-row">
+              <div class="worship-row-left"><strong>주일 오후예배</strong><span>찬양과 말씀, 기도를 통한 치유 사역</span></div>
+              <span class="worship-time">오후 1시 30분</span>
+            </div>
+            <div class="worship-row">
+              <div class="worship-row-left"><strong>수요 기도회</strong></div>
+              <span class="worship-time">저녁 7시 30분</span>
+            </div>
+            <div class="worship-row">
+              <div class="worship-row-left"><strong>금요 철야 기도회</strong></div>
+              <span class="worship-time">저녁 8시</span>
+            </div>
+            <div class="worship-row">
+              <div class="worship-row-left"><strong>새벽기도회</strong><span>국제 3시간 기도처</span></div>
+              <span class="worship-time">새벽 5시부터 3시간</span>
+            </div>
+          </div>
+        </div>
+        <div class="anim anim-delay-2">
+          <h3 class="worship-title">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg>
+            오시는 길
+          </h3>
+          <div class="map-container" style="background-image: url('./source/map.png');">
+          </div>
+          <div class="address">
+            <p class="address-line">경남 거제시 일운면 옥림3길 44</p>
+            <div class="address-btns">
+              <a href="https://map.naver.com/p/search/경남%20거제시%20일운면%20옥림3길%2044" target="_blank" class="btn-outline">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" />
+                </svg>
+                길찾기
+              </a>
+              <a href="tel:010-9311-9003" class="btn-outline">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                </svg>
+                전화문의
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer" id="site-footer"></footer>
+
+<script src="components.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>영상선교 | 하늘빛힐링교회</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ===== 빈 상태 ===== */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding: 5rem 1rem;
+      color: var(--fg-muted);
+      text-align: center;
+    }
+    .empty-state svg { width: 3.5rem; height: 3.5rem; opacity: 0.3; }
+    .empty-state p { font-size: 1rem; }
+
+    /* ===== 업로드 버튼 영역 ===== */
+    .upload-area {
+      display: flex;
+      justify-content: right;
+    }
+    .btn-upload {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #a2b9ff;
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0.6rem 2rem;
+      border-radius: 9999px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(37,99,235,0.35);
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .btn-upload:hover { opacity: 0.9; transform: translateY(-2px); }
+    .btn-upload svg { width: 1.1rem; height: 1.1rem; }
+
+    /* ===== 모달 공통 ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 1rem;
+      overflow-y: auto;
+      backdrop-filter: blur(2px);
+    }
+    .modal-box {
+      background: var(--surface, #fff);
+      border: 1px solid var(--border);
+      border-radius: 1.25rem;
+      padding: 2rem;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.25);
+      animation: modalIn 0.18s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.95) translateY(8px); }
+      to   { opacity: 1; transform: scale(1)    translateY(0); }
+    }
+    .modal-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--fg);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .modal-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--fg-muted);
+      margin-bottom: 0.35rem;
+    }
+    .modal-input {
+      width: 100%;
+      border: 1.5px solid var(--border);
+      border-radius: 0.6rem;
+      padding: 0.7rem 0.9rem;
+      font-size: 0.95rem;
+      color: var(--fg);
+      background: var(--bg, #fff);
+      outline: none;
+      box-sizing: border-box;
+      transition: border-color 0.15s;
+      margin-bottom: 1rem;
+    }
+    .modal-input:focus { border-color: var(--primary); }
+    .modal-error {
+      font-size: 0.85rem;
+      color: #ef4444;
+      margin-top: -0.5rem;
+      margin-bottom: 0.75rem;
+    }
+    .modal-btns {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: flex-end;
+      margin-top: 1.75rem;
+    }
+    .btn-modal-cancel {
+      padding: 0.6rem 1.25rem;
+      border-radius: 0.5rem;
+      border: 1.5px solid var(--border);
+      background: transparent;
+      color: var(--fg-muted);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-modal-cancel:hover { background: var(--border); }
+    .btn-modal-confirm {
+      padding: 0.6rem 1.5rem;
+      border-radius: 0.5rem;
+      border: none;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn-modal-confirm:hover { opacity: 0.88; }
+
+    /* ===== 플레이어 모달 ===== */
+    .player-modal-box {
+      max-width: 760px;
+      padding: 1.5rem;
+    }
+    .player-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .player-header h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--fg);
+      line-height: 1.45;
+      flex: 1;
+      margin: 0;
+    }
+    .btn-player-close {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: 0.5rem;
+      border: 1.5px solid var(--border);
+      background: transparent;
+      color: var(--fg-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-player-close:hover { background: var(--border); }
+    .player-thumb-link {
+      display: block;
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 0.5rem;
+      background: #000;
+      text-decoration: none;
+    }
+    .player-thumb-link img {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .player-thumb-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      background: rgba(0,0,0,0.35);
+      transition: background 0.2s;
+    }
+    .player-thumb-link:hover .player-thumb-overlay { background: rgba(0,0,0,0.55); }
+    .player-play-btn {
+      width: 4.5rem; height: 4.5rem;
+      background: rgba(255,255,255,0.95);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.2s;
+    }
+    .player-thumb-link:hover .player-play-btn { transform: scale(1.1); }
+    .player-play-btn svg { width: 1.8rem; height: 1.8rem; color: #e00; margin-left: 0.2rem; }
+    .player-yt-label {
+      color: #fff; font-size: 0.9rem; font-weight: 700;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+    }
+    .player-footer {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1rem;
+    }
+    .btn-delete {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 0.4rem;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--fg-muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-delete:hover { background: var(--border); }
+    .btn-delete svg { width: 0.85rem; height: 0.85rem; }
+  </style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="site-header" id="site-header"></header>
+
+<div class="breadcrumb">
+  <a href="index.html">홈</a><span>›</span>영상선교
+</div>
+
+<main>
+
+  <!-- ===== PAGE HERO ===== -->
+  <div class="page-hero" style="background-image: url('./source/hero-sermon.jpg');">
+    <div class="page-hero-content hero-content">
+      <h1>영상선교</h1>
+      <p>하나님의 살아있는 말씀을 영상으로 만나세요</p>
+    </div>
+  </div>
+
+  <!-- ===== VIDEO LIST ===== -->
+  <section class="section bg-surface-2">
+    <div class="section-inner">
+      <div class="section-header anim">
+        <h3>영상 목록</h3>
+        <div class="section-header-bar"></div>
+      </div>
+
+      <!-- 동적 그리드 -->
+      <div id="videoGrid" class="sermon-grid"></div>
+
+      <!-- 빈 상태 -->
+      <div id="emptyState" class="empty-state" style="display:none;">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h1.5C5.496 19.5 6 18.996 6 18.375m-3.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-1.5A1.125 1.125 0 0118 18.375M20.625 4.5H3.375m17.25 0c.621 0 1.125.504 1.125 1.125M20.625 4.5h-1.5C18.504 4.5 18 5.004 18 5.625m3.75 0v1.5c0 .621-.504 1.125-1.125 1.125M3.375 4.5c-.621 0-1.125.504-1.125 1.125M3.375 4.5h1.5C5.496 4.5 6 5.004 6 5.625m-3.75 0v1.5c0 .621.504 1.125 1.125 1.125m0 0h1.5m-1.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m1.5-3.75C5.496 8.25 6 8.754 6 9.375v1.5m0-5.25v5.25m0-5.25C6 5.004 6.504 4.5 7.125 4.5h9.75c.621 0 1.125.504 1.125 1.125m1.125 2.625h1.5m-1.5 0A1.125 1.125 0 0118 9.375v1.5m1.5-3.75C19.496 8.25 20 8.754 20 9.375v1.5m0 0v5.25m0-5.25c0-.621.504-1.125 1.125-1.125h1.5" />
+        </svg>
+        <p>등록된 영상이 없습니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 업로드 버튼 ===== -->
+  <section class="section bg-surface">
+    <div class="upload-area">
+      <button id="uploadBtn" class="btn-upload">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+        </svg>
+        영상 업로드
+      </button>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer" id="site-footer"></footer>
+
+
+<!-- ======================================================
+     비밀번호 확인 모달
+======================================================= -->
+<div id="pwModal" class="modal-overlay" style="display:none;">
+  <div class="modal-box">
+    <p class="modal-title">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:1.3rem;height:1.3rem;color:var(--primary);">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+      </svg>
+      비밀번호 확인
+    </p>
+    <label class="modal-label" for="pwInput">비밀번호</label>
+    <input id="pwInput" type="password" class="modal-input" placeholder="비밀번호를 입력하세요" autocomplete="off" />
+    <p id="pwError" class="modal-error" style="display:none;">비밀번호가 올바르지 않습니다.</p>
+    <div class="modal-btns">
+      <button id="pwCancel" class="btn-modal-cancel">취소</button>
+      <button id="pwConfirm" class="btn-modal-confirm">확인</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ======================================================
+     영상 등록 모달
+======================================================= -->
+<div id="uploadModal" class="modal-overlay" style="display:none;">
+  <div class="modal-box">
+    <p class="modal-title">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:1.3rem;height:1.3rem;color:var(--primary);">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+      </svg>
+      영상 등록
+    </p>
+    <label class="modal-label" for="titleInput">제목</label>
+    <input id="titleInput" type="text" class="modal-input" placeholder="영상 제목을 입력하세요" />
+    <label class="modal-label" for="urlInput">유튜브 주소</label>
+    <input id="urlInput" type="url" class="modal-input" placeholder="https://www.youtube.com/watch?v=..." />
+    <p id="uploadError" class="modal-error" style="display:none;"></p>
+    <div class="modal-btns">
+      <button id="uploadCancel" class="btn-modal-cancel">취소</button>
+      <button id="uploadConfirm" class="btn-modal-confirm">등록</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ======================================================
+     유튜브 플레이어 모달
+======================================================= -->
+<div id="playerModal" class="modal-overlay" style="display:none;">
+  <div class="modal-box player-modal-box">
+    <div class="player-header">
+      <h4 id="playerTitle"></h4>
+      <button id="playerClose" class="btn-player-close">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:.9rem;height:.9rem;">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+        닫기
+      </button>
+    </div>
+    <div class="player-video-wrap" id="playerVideoWrap"></div>
+    <div class="player-footer">
+      <button id="deleteBtn" class="btn-delete">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+        </svg>
+        삭제
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<script src="components.js"></script>
+<script src="main.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  const PW_HASH = '51adbed8359a742a26df4a353a4cc8c2727b95c69c4e43fb9dac78a28289ed39';
+  const KEY = 'hlhc_videos';
+
+  /* ---------- 상태 ---------- */
+  let pwMode     = '';   // 'upload' | 'delete'
+  let activeId   = null; // 삭제 대상 id
+
+  /* ---------- Storage ---------- */
+  function load() {
+    try { return JSON.parse(localStorage.getItem(KEY)) || []; }
+    catch { return []; }
+  }
+  function save(list) { localStorage.setItem(KEY, JSON.stringify(list)); }
+
+  /* ---------- YouTube 유틸 ---------- */
+  function parseVideoId(url) {
+    const pats = [
+      /[?&]v=([a-zA-Z0-9_-]{11})/,
+      /youtu\.be\/([a-zA-Z0-9_-]{11})/,
+      /embed\/([a-zA-Z0-9_-]{11})/,
+      /shorts\/([a-zA-Z0-9_-]{11})/
+    ];
+    for (const p of pats) {
+      const m = url.match(p);
+      if (m) return m[1];
+    }
+    return null;
+  }
+
+  function esc(s) {
+    return String(s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  /* ---------- 렌더링 ---------- */
+  function render() {
+    const list   = load();
+    const grid   = document.getElementById('videoGrid');
+    const empty  = document.getElementById('emptyState');
+
+    if (list.length === 0) {
+      grid.innerHTML    = '';
+      empty.style.display = 'flex';
+      return;
+    }
+    empty.style.display = 'none';
+
+    grid.innerHTML = list.map(v => `
+      <div class="sermon-card video-item" style="cursor:pointer;"
+           data-id="${esc(v.id)}" data-vid="${esc(v.videoId)}">
+        <div class="sermon-thumb"
+             style="background-image:url('https://img.youtube.com/vi/${esc(v.videoId)}/hqdefault.jpg');">
+          <div class="sermon-play-overlay">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.328l5.603 3.113z"/>
+            </svg>
+          </div>
+        </div>
+        <h4>${esc(v.title)}</h4>
+      </div>
+    `).join('');
+
+    grid.querySelectorAll('.video-item').forEach(card => {
+      card.addEventListener('click', () => {
+        activeId = card.dataset.id;
+        openPlayer(card.dataset.vid, card.querySelector('h4').textContent);
+      });
+    });
+  }
+
+  /* ---------- 스크롤 잠금 ---------- */
+  const lockScroll   = () => { document.body.style.overflow = 'hidden'; };
+  const unlockScroll = () => { document.body.style.overflow = ''; };
+
+  /* ---------- 비밀번호 모달 ---------- */
+  function openPw(mode) {
+    pwMode = mode;
+    document.getElementById('pwInput').value = '';
+    document.getElementById('pwError').style.display = 'none';
+    document.getElementById('pwModal').style.display = 'flex';
+    lockScroll();
+    setTimeout(() => document.getElementById('pwInput').focus(), 60);
+  }
+
+  function closePw() {
+    document.getElementById('pwModal').style.display = 'none';
+    const prevMode = pwMode;
+    pwMode = '';
+    return prevMode;
+  }
+
+  async function confirmPw() {
+    const val = document.getElementById('pwInput').value;
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(val));
+    const hex = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    if (hex !== PW_HASH) {
+      document.getElementById('pwError').style.display = 'block';
+      document.getElementById('pwInput').value = '';
+      document.getElementById('pwInput').focus();
+      return;
+    }
+    const mode = closePw();
+    if (mode === 'upload') {
+      openUpload();
+    } else if (mode === 'delete') {
+      doDelete();
+    }
+  }
+
+  document.getElementById('pwConfirm').addEventListener('click', confirmPw);
+  document.getElementById('pwCancel').addEventListener('click', () => {
+    closePw();
+    unlockScroll();
+  });
+  document.getElementById('pwInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') confirmPw();
+  });
+
+  /* ---------- 등록 모달 ---------- */
+  function openUpload() {
+    document.getElementById('titleInput').value = '';
+    document.getElementById('urlInput').value   = '';
+    document.getElementById('uploadError').style.display = 'none';
+    document.getElementById('uploadModal').style.display = 'flex';
+    setTimeout(() => document.getElementById('titleInput').focus(), 60);
+  }
+
+  function closeUpload() {
+    document.getElementById('uploadModal').style.display = 'none';
+    unlockScroll();
+  }
+
+  function submitUpload() {
+    const title  = document.getElementById('titleInput').value.trim();
+    const url    = document.getElementById('urlInput').value.trim();
+    const errEl  = document.getElementById('uploadError');
+
+    if (!title) {
+      errEl.textContent     = '제목을 입력해주세요.';
+      errEl.style.display   = 'block';
+      return;
+    }
+    const videoId = parseVideoId(url);
+    if (!videoId) {
+      errEl.textContent     = '올바른 유튜브 주소를 입력해주세요.';
+      errEl.style.display   = 'block';
+      return;
+    }
+
+    const list = load();
+    list.unshift({ id: Date.now().toString(), title, videoId });
+    save(list);
+    closeUpload();
+    render();
+  }
+
+  document.getElementById('uploadConfirm').addEventListener('click', submitUpload);
+  document.getElementById('uploadCancel').addEventListener('click', closeUpload);
+  document.getElementById('urlInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') submitUpload();
+  });
+
+  /* ---------- 플레이어 모달 ---------- */
+  function openPlayer(videoId, title) {
+    document.getElementById('playerTitle').textContent = title;
+    document.getElementById('playerVideoWrap').innerHTML =
+      '<a class="player-thumb-link" href="https://www.youtube.com/watch?v=' + videoId + '" target="_blank" rel="noopener">' +
+        '<img src="https://img.youtube.com/vi/' + videoId + '/maxresdefault.jpg"' +
+             ' onerror="this.src=\'https://img.youtube.com/vi/' + videoId + '/hqdefault.jpg\'"' +
+             ' alt="' + esc(title) + '">' +
+        '<div class="player-thumb-overlay">' +
+          '<div class="player-play-btn">' +
+            '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>' +
+          '</div>' +
+          '<span class="player-yt-label">▶ YouTube에서 재생</span>' +
+        '</div>' +
+      '</a>';
+    document.getElementById('playerModal').style.display = 'flex';
+    lockScroll();
+  }
+
+  function closePlayer() {
+    document.getElementById('playerModal').style.display = 'none';
+    document.getElementById('playerVideoWrap').innerHTML = '';
+    unlockScroll();
+  }
+
+  document.getElementById('playerClose').addEventListener('click', closePlayer);
+
+  // 오버레이 클릭으로 닫기
+  document.getElementById('playerModal').addEventListener('click', function (e) {
+    if (e.target === this) closePlayer();
+  });
+
+  /* ---------- 삭제 ---------- */
+  document.getElementById('deleteBtn').addEventListener('click', () => {
+    closePlayer();
+    openPw('delete');
+  });
+
+  function doDelete() {
+    if (!activeId) return;
+    save(load().filter(v => v.id !== activeId));
+    activeId = null;
+    unlockScroll();
+    render();
+  }
+
+  /* ---------- 업로드 버튼 ---------- */
+  document.getElementById('uploadBtn').addEventListener('click', () => openPw('upload'));
+
+  /* ---------- 초기 렌더링 ---------- */
+  render();
+})();
+</script>
+</body>
+</html>

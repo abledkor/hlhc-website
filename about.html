@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>교회소개 | 하늘빛힐링교회</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .pastor-card {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1.25rem;
+      padding: 2.5rem;
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+    .pastor-photo {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background-color: var(--slate-200);
+      background-size: cover;
+      background-position: center;
+      flex-shrink: 0;
+      border: 4px solid var(--primary-light);
+    }
+    .pastor-body { flex: 1; min-width: 200px; }
+    .pastor-body h4 { font-size: 1.5rem; font-weight: 700; color: var(--fg); margin-bottom: 0.25rem; }
+    .pastor-body .pastor-role { color: var(--primary); font-weight: 600; margin-bottom: 1rem; }
+    .pastor-body p { color: var(--fg-muted); line-height: 1.8; }
+    .timeline { display: flex; flex-direction: column; gap: 0; }
+    .timeline-item { display: flex; gap: 1.5rem; position: relative; padding-bottom: 2rem; }
+    .timeline-item:last-child { padding-bottom: 0; }
+    .timeline-left { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; width: 60px; }
+    .timeline-year { font-size: 0.8rem; font-weight: 700; color: var(--primary); white-space: nowrap; }
+    .timeline-dot { width: 12px; height: 12px; border-radius: 50%; background-color: var(--primary); margin: 0.5rem 0; flex-shrink: 0; }
+    .timeline-line { flex: 1; width: 2px; background-color: var(--border); }
+    .timeline-item:last-child .timeline-line { display: none; }
+    .timeline-content { padding-top: 0.2rem; }
+    .timeline-content h5 { font-weight: 700; color: var(--fg); margin-bottom: 0.25rem; }
+    .timeline-content p { font-size: 0.9rem; color: var(--fg-muted); line-height: 1.6; }
+    .vision-cards { display: grid; gap: 1.5rem; }
+    @media (min-width: 768px) { .vision-cards { grid-template-columns: 1fr 1fr; } }
+    .vision-card {
+      background: linear-gradient(135deg, var(--primary) 0%, #1e40af 100%);
+      color: #fff;
+      border-radius: 1rem;
+      padding: 2rem;
+    }
+    .vision-card h4 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .vision-card p { font-size: 1rem; opacity: 0.9; line-height: 1.7; }
+    .mission-card {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 2rem;
+    }
+    .mission-card h4 { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--fg); }
+    .mission-card p { font-size: 1rem; color: var(--fg-muted); line-height: 1.7; }
+  </style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="site-header" id="site-header"></header>
+
+<!-- Breadcrumb -->
+<div class="breadcrumb">
+  <a href="index.html">홈</a><span>›</span>교회소개
+</div>
+
+<main>
+
+  <!-- ===== PAGE HERO ===== -->
+  <div class="page-hero" style="background-image: url('./source/won.png');">
+    <div class="page-hero-content hero-content">
+      <h1>교회소개</h1>
+      <p>하늘빛힐링교회를 소개합니다</p>
+    </div>
+  </div>
+
+  <!-- ===== WELCOME ===== -->
+  <section class="section bg-surface">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-img anim from-left"
+          style="background-image: url('./source/church.png');"></div>
+        <div class="about-text anim from-right anim-delay-2">
+          <div class="section-header" style="margin-bottom:1rem;">
+            <h3>할렐루야!</h3>
+            <div class="section-header-bar"></div>
+          </div>
+          <h4>거제 하늘빛힐링교회 홈페이지에 방문해주심을 감사드리며 주님의 사랑으로 환영하고 축복합니다.</h4>
+          <p>저희 교회 표어는 '말씀과 기도로 치유, 회복, 돌파, 증가, 형통이 역사하는 교회'입니다. 나라와 민족, 그리고 세계 선교와 힐링을 목적으로 설립을 하였습니다.</p>
+          <p>저희 교회는 성경 말씀을 지키고 예배와 기도, 찬양을 중심으로 복음의 전파와 선교를 최우선으로 세상의 빛과 소금 같은 역할을 감당하여 생명을 구원하고 치유와 성령사역을 중심으로 확장하고 있습니다.</p>
+          <p>저희 교회는 선교와 성도의 가정 부흥과 비전을 실천하고 세상을 변화시키기 위해 십자가의 복음과 예수님의 사랑을 실천하는 교회입니다. 저희와 함께 하는 모든 이들에게 주님의 한량없는 은혜와 사랑이 항상 충만하셔서 지경의 확장과 부흥이 일어나시기를 축복합니다.</p>
+          <p>오십시오. 인생의 변화와 기적같이 일이 일어나고 역전되는 삶으로 승리합니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== VISION & MISSION ===== -->
+  <section class="section bg-surface-2">
+    <div class="section-inner">
+      <div class="section-header anim">
+        <h3>비전 &amp; 사명</h3>
+        <div class="section-header-bar"></div>
+      </div>
+      <div class="vision-cards anim anim-delay-1">
+        <div class="vision-card">
+          <h4>🌟 교회 표어</h4>
+          <p>"너희는 세상의 빛이라" (마태복음 5:14)<br><br>세상에서 빛과 소금같은 역할과 본이 되도록 실천하는 교회입니다. 어둡고 혼탁한 이 세대에 교회가 교회답게 사랑과 수고하며 믿음으로 역사하고 소망과 인내를 통하여 예수 그리스도의 사역과 성령의 역사하심이 본이 되는 것을 표어로 삼고 사명을 감당하고 있습니다.</p>
+        </div>
+        <div class="mission-card">
+          <h4>🎯 표어 실천 자세</h4>
+          <h4>
+            (1) 입을 넓게 열고<br>
+            (2) 주만 바라보고<br>
+            (3) 매일 기적같은 일을 체험하라
+          </h4>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CORE VALUES ===== -->
+  <section class="section bg-surface">
+    <div class="section-inner">
+      <div class="section-header anim">
+        <h3>핵심 가치</h3>
+        <div class="section-header-bar"></div>
+      </div>
+      <div class="value-grid">
+        <div class="value-card anim">
+          <div class="value-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>
+          </div>
+          <h4>말씀 중심</h4>
+          <p>하나님의 말씀을 삶의 기준으로 삼고, 성경을 통해 하나님의 뜻을 발견하며 살아갑니다.</p>
+        </div>
+        <div class="value-card anim anim-delay-1">
+          <div class="value-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" /></svg>
+          </div>
+          <h4>사랑과 섬김</h4>
+          <p>예수님의 사랑을 본받아 서로 섬기고, 이웃과 지역사회에 사랑을 실천합니다.</p>
+        </div>
+        <div class="value-card anim anim-delay-2">
+          <div class="value-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253M3 12a8.959 8.959 0 011.284-4.418" /></svg>
+          </div>
+          <h4>선교와 전도</h4>
+          <p>복음의 능력을 믿고, 온 세상에 예수님을 전하는 선교하는 교회로 세워집니다.</p>
+        </div>
+        <div class="value-card anim anim-delay-3">
+          <div class="value-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" /></svg>
+          </div>
+          <h4>다음 세대</h4>
+          <p>믿음의 다음 세대를 세우고, 청소년과 청년들이 하나님 안에서 꿈꿀 수 있도록 지원합니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PASTOR ===== -->
+  <section class="section bg-surface-2">
+    <div class="section-inner">
+      <div class="section-header anim">
+        <h3>담임목사 소개</h3>
+        <div class="section-header-bar"></div>
+      </div>
+      <div class="pastor-card anim anim-delay-1">
+        <div class="pastor-photo" style="background-image: url('./source/won1.png');"></div>
+        <div class="pastor-body">
+          <h4>원보연 담임목사</h4>
+          <p class="pastor-role">하늘빛힐링교회 담임목사</p>
+          <p>하나님의 사랑과 치유의 은혜가 이 교회를 통해 흘러가기를 소망합니다. 상처받은 영혼들이 회복되고, 약한 자가 강해지며, 고독한 자가 공동체 안에서 위로받는 교회를 꿈꿉니다.</p>
+          <p>복음의 능력을 믿으며, 말씀과 기도로 하나님 나라를 세워가는 일에 여러분과 함께 동역하고 싶습니다. 하늘빛힐링교회에 오신 것을 진심으로 환영합니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer" id="site-footer"></footer>
+
+<script src="components.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
