@@ -99,7 +99,7 @@ svg { display: inline-block; vertical-align: middle; }
 }
 .header-logo svg { width: 2rem; height: 2rem; }
 .header-logo h2 {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: var(--fg);
   letter-spacing: -0.02em;
