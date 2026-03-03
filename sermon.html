@@ -374,19 +374,21 @@
 (function () {
   'use strict';
 
-  const PW_HASH = '51adbed8359a742a26df4a353a4cc8c2727b95c69c4e43fb9dac78a28289ed39';
-  const KEY = 'hlhc_videos';
+  const API = '/api/videos';
 
   /* ---------- 상태 ---------- */
-  let pwMode     = '';   // 'upload' | 'delete'
-  let activeId   = null; // 삭제 대상 id
+  let pwMode   = '';   // 'upload' | 'delete'
+  let pwValue  = '';   // 검증된 비밀번호 (임시 보관)
+  let activeId = null; // 삭제 대상 id
 
-  /* ---------- Storage ---------- */
-  function load() {
-    try { return JSON.parse(localStorage.getItem(KEY)) || []; }
-    catch { return []; }
+  /* ---------- API ---------- */
+  async function apiPost(body) {
+    return fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
   }
-  function save(list) { localStorage.setItem(KEY, JSON.stringify(list)); }
 
   /* ---------- YouTube 유틸 ---------- */
   function parseVideoId(url) {
@@ -394,7 +396,7 @@
       /[?&]v=([a-zA-Z0-9_-]{11})/,
       /youtu\.be\/([a-zA-Z0-9_-]{11})/,
       /embed\/([a-zA-Z0-9_-]{11})/,
-      /shorts\/([a-zA-Z0-9_-]{11})/
+      /shorts\/([a-zA-Z0-9_-]{11})/,
     ];
     for (const p of pats) {
       const m = url.match(p);
@@ -410,13 +412,12 @@
   }
 
   /* ---------- 렌더링 ---------- */
-  function render() {
-    const list   = load();
-    const grid   = document.getElementById('videoGrid');
-    const empty  = document.getElementById('emptyState');
+  function render(list) {
+    const grid  = document.getElementById('videoGrid');
+    const empty = document.getElementById('emptyState');
 
-    if (list.length === 0) {
-      grid.innerHTML    = '';
+    if (!list || list.length === 0) {
+      grid.innerHTML = '';
       empty.style.display = 'flex';
       return;
     }
@@ -446,13 +447,24 @@
     });
   }
 
+  async function loadAndRender() {
+    try {
+      const res  = await fetch(API);
+      const list = await res.json();
+      render(list);
+    } catch {
+      render([]);
+    }
+  }
+
   /* ---------- 스크롤 잠금 ---------- */
   const lockScroll   = () => { document.body.style.overflow = 'hidden'; };
   const unlockScroll = () => { document.body.style.overflow = ''; };
 
   /* ---------- 비밀번호 모달 ---------- */
   function openPw(mode) {
-    pwMode = mode;
+    pwMode  = mode;
+    pwValue = '';
     document.getElementById('pwInput').value = '';
     document.getElementById('pwError').style.display = 'none';
     document.getElementById('pwModal').style.display = 'flex';
@@ -469,19 +481,27 @@
 
   async function confirmPw() {
     const val = document.getElementById('pwInput').value;
-    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(val));
-    const hex = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-    if (hex !== PW_HASH) {
+    const btn = document.getElementById('pwConfirm');
+
+    btn.disabled    = true;
+    btn.textContent = '확인 중…';
+    try {
+      const res = await apiPost({ password: val, action: 'verify' });
+      if (!res.ok) {
+        document.getElementById('pwError').style.display = 'block';
+        document.getElementById('pwInput').value = '';
+        document.getElementById('pwInput').focus();
+        return;
+      }
+      pwValue = val;
+      const mode = closePw();
+      if (mode === 'upload') openUpload();
+      else if (mode === 'delete') doDelete();
+    } catch {
       document.getElementById('pwError').style.display = 'block';
-      document.getElementById('pwInput').value = '';
-      document.getElementById('pwInput').focus();
-      return;
-    }
-    const mode = closePw();
-    if (mode === 'upload') {
-      openUpload();
-    } else if (mode === 'delete') {
-      doDelete();
+    } finally {
+      btn.disabled    = false;
+      btn.textContent = '확인';
     }
   }
 
@@ -508,28 +528,44 @@
     unlockScroll();
   }
 
-  function submitUpload() {
+  async function submitUpload() {
     const title  = document.getElementById('titleInput').value.trim();
     const url    = document.getElementById('urlInput').value.trim();
     const errEl  = document.getElementById('uploadError');
+    const btn    = document.getElementById('uploadConfirm');
 
     if (!title) {
-      errEl.textContent     = '제목을 입력해주세요.';
-      errEl.style.display   = 'block';
+      errEl.textContent   = '제목을 입력해주세요.';
+      errEl.style.display = 'block';
       return;
     }
     const videoId = parseVideoId(url);
     if (!videoId) {
-      errEl.textContent     = '올바른 유튜브 주소를 입력해주세요.';
-      errEl.style.display   = 'block';
+      errEl.textContent   = '올바른 유튜브 주소를 입력해주세요.';
+      errEl.style.display = 'block';
       return;
     }
 
-    const list = load();
-    list.unshift({ id: Date.now().toString(), title, videoId });
-    save(list);
-    closeUpload();
-    render();
+    btn.disabled    = true;
+    btn.textContent = '등록 중…';
+    try {
+      const video = { id: Date.now().toString(), title, videoId };
+      const res   = await apiPost({ password: pwValue, action: 'add', video });
+      if (!res.ok) {
+        errEl.textContent   = '등록에 실패했습니다. 다시 시도해주세요.';
+        errEl.style.display = 'block';
+        return;
+      }
+      const list = await res.json();
+      closeUpload();
+      render(list);
+    } catch {
+      errEl.textContent   = '네트워크 오류. 다시 시도해주세요.';
+      errEl.style.display = 'block';
+    } finally {
+      btn.disabled    = false;
+      btn.textContent = '등록';
+    }
   }
 
   document.getElementById('uploadConfirm').addEventListener('click', submitUpload);
@@ -564,8 +600,6 @@
   }
 
   document.getElementById('playerClose').addEventListener('click', closePlayer);
-
-  // 오버레이 클릭으로 닫기
   document.getElementById('playerModal').addEventListener('click', function (e) {
     if (e.target === this) closePlayer();
   });
@@ -576,19 +610,26 @@
     openPw('delete');
   });
 
-  function doDelete() {
+  async function doDelete() {
     if (!activeId) return;
-    save(load().filter(v => v.id !== activeId));
-    activeId = null;
-    unlockScroll();
-    render();
+    try {
+      const res = await apiPost({ password: pwValue, action: 'delete', videoId: activeId });
+      if (res.ok) {
+        const list = await res.json();
+        activeId = null;
+        unlockScroll();
+        render(list);
+      }
+    } catch {
+      // 실패 시 무시
+    }
   }
 
   /* ---------- 업로드 버튼 ---------- */
   document.getElementById('uploadBtn').addEventListener('click', () => openPw('upload'));
 
   /* ---------- 초기 렌더링 ---------- */
-  render();
+  loadAndRender();
 })();
 </script>
 </body>
