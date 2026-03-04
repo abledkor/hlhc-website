@@ -39,6 +39,38 @@
     }
     .mission-banner h4 { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.75rem; }
     .mission-banner p { font-size: 1rem; opacity: 0.9; line-height: 1.8; max-width: 600px; margin: 0 auto; }
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+  @media (max-width: 640px) {
+    .photo-grid { grid-template-columns: repeat(1, 1fr); }
+  }
+  .photo-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .photo-img-wrap {
+    aspect-ratio: 1 / 0.8;
+    overflow: hidden;
+    border-radius: 0.75rem;
+    border: 1px solid var(--border);
+    background-color: var(--surface);
+  }
+  .photo-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .photo-caption {
+    font-size: 0.9rem;
+    color: var(--fg-muted);
+    text-align: center;
+    line-height: 1.5;
+  }
   </style>
 </head>
 <body>
@@ -54,7 +86,7 @@
 <main>
 
   <!-- ===== PAGE HERO ===== -->
-  <div class="page-hero" style="background-image: url('./source/hero-mission.jpeg');">
+  <div class="page-hero" style="background-image: url('./source/hero-mission.png');">
     <div class="page-hero-content hero-content">
       <h1>선교활동</h1>
       <p>열방을 향한 하늘빛힐링교회의 선교 이야기</p>
@@ -140,6 +172,72 @@
           </div>
         </div>
 
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PHOTO GALLERY ===== -->
+  <section class="section bg-surface-2">
+    <div class="section-inner">
+      <div class="section-header anim">
+        <h3>선교 사진</h3>
+        <div class="section-header-bar"></div>
+      </div>
+      <div class="photo-grid anim">
+        <div class="photo-card">
+          <div class="photo-img-wrap">
+            <img src="./source/ms1.png" alt="선교 사진 1" />
+          </div>
+          <p class="photo-caption">캄보디아 개척교회 선교</p>
+        </div>
+        <div class="photo-card">
+          <div class="photo-img-wrap">
+            <img src="./source/ms2.png" alt="선교 사진 2" />
+          </div>
+          <p class="photo-caption">캄보디아 선교</p>
+        </div>
+        <div class="photo-card">
+          <div class="photo-img-wrap">
+            <img src="./source/ms3.png" alt="선교 사진 3" />
+          </div>
+          <p class="photo-caption">캄보디아 선교</p>
+        </div>
+        <div class="photo-card">
+          <div class="photo-img-wrap">
+            <img src="./source/ms4.png" alt="선교 사진 4" />
+          </div>
+          <p class="photo-caption">캄보디아 선교</p>
+        </div>
+        <div class="photo-card">
+          <div class="photo-img-wrap">
+            <img src="./source/ms5.png" alt="선교 사진 5" />
+          </div>
+          <p class="photo-caption">캄보디아 선교</p>
+        </div>
+        <div class="photo-card">
+          <div class="photo-img-wrap">
+            <img src="./source/ms6.png" alt="선교 사진 6" />
+          </div>
+          <p class="photo-caption">캄보디아 선교</p>
+        </div>
+        <div class="photo-card">
+          <div class="photo-img-wrap">
+            <img src="./source/ms7.png" alt="선교 사진 6" />
+          </div>
+          <p class="photo-caption">파라과이 선교</p>
+        </div>
+        <div class="photo-card">
+          <div class="photo-img-wrap">
+            <img src="./source/ms8.png" alt="선교 사진 6" />
+          </div>
+          <p class="photo-caption">파라과이 선교</p>
+        </div>
+        <div class="photo-card">
+          <div class="photo-img-wrap">
+            <img src="./source/ms9.png" alt="선교 사진 6" />
+          </div>
+          <p class="photo-caption">파라과이 선교</p>
+        </div>
       </div>
     </div>
   </section>

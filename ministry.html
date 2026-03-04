@@ -94,6 +94,38 @@
       padding: 0.25rem 0.75rem;
       border-radius: 9999px;
     }
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+  @media (max-width: 640px) {
+    .photo-grid { grid-template-columns: repeat(1, 1fr); }
+  }
+  .photo-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .photo-img-wrap {
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 0.75rem;
+    border: 1px solid var(--border);
+    background-color: var(--surface);
+  }
+  .photo-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .photo-caption {
+    font-size: 0.9rem;
+    color: var(--fg-muted);
+    text-align: center;
+    line-height: 1.5;
+  }
   </style>
 </head>
 <body>
@@ -109,7 +141,7 @@
 <main>
 
   <!-- ===== PAGE HERO ===== -->
-  <div class="page-hero" style="background-image: url('./source/hero-ministry.jpg');">
+  <div class="page-hero" style="background-image: url('./source/hero-ministry.png');">
     <div class="page-hero-content hero-content">
       <h1>교육과 사역</h1>
       <p>교회의 다양한 교육 및 사역을 소개합니다</p>
@@ -245,6 +277,36 @@
             <span>상담과 예배 및 기도로 힐링을 강력하게 역사하도록 사역하면서 주변의 다양한 문화체험을 통한 영, 혼, 육의 회복을 위해 안내와 투어를 도와 드립니다.</span>
           </li>
         </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PHOTO GALLERY ===== -->
+  <section class="section bg-surface-2">
+    <div class="section-inner">
+      <div class="section-header anim">
+        <h3>사역 사진</h3>
+        <div class="section-header-bar"></div>
+      </div>
+      <div class="photo-grid anim">
+        <div class="photo-card">
+          <div class="photo-img-wrap">
+            <img src="./source/mn1.png" alt="사역 사진 1" />
+          </div>
+          <p class="photo-caption">부흥회 사진</p>
+        </div>
+        <div class="photo-card">
+          <div class="photo-img-wrap">
+            <img src="./source/mn2.png" alt="사역 사진 2" />
+          </div>
+          <p class="photo-caption">치유사역</p>
+        </div>
+        <div class="photo-card">
+          <div class="photo-img-wrap">
+            <img src="./source/mn3.png" alt="사역 사진 3" />
+          </div>
+          <p class="photo-caption">치유사역</p>
+        </div>
       </div>
     </div>
   </section>

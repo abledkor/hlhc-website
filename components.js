@@ -3,7 +3,7 @@
   const HEADER_HTML = `
   <div class="header-inner">
     <a href="index.html" class="header-logo">
-      <img src="source/clogo.png" alt="" class="logo-img">
+      <img src="source/bslogo-t.png" alt="" class="logo-img">
       <h2>하늘빛힐링교회</h2>
     </a>
     <nav class="desktop-nav">
@@ -36,7 +36,7 @@
     <div class="footer-grid">
       <div class="footer-brand">
         <div class="footer-logo">
-          <img src="source/clogo-g.png" alt="" class="logo-img"><span>하늘빛힐링교회</span>
+          <img src="source/bslogo.svg" alt="" class="logo-img"><span>하늘빛힐링교회</span>
         </div>
         <p class="footer-desc">하늘빛힐링교회는 말씀과 기도로 치유, 회복, 돌파, 증가, 형통이 역사하는 교회입니다.</p>
         <div class="footer-social">
